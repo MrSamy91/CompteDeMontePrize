@@ -1,0 +1,868 @@
+/* Variables et Reset */
+:root {
+    --primary: #4361ee;
+    --secondary: #3f37c9;
+    --success: #4bb543;
+    --text: #2b2d42;
+    --glass: rgba(255, 255, 255, 0.15);
+    --glass-strong: rgba(255, 255, 255, 0.25);
+    --border: rgba(255, 255, 255, 0.18);
+    --shadow: rgba(0, 0, 0, 0.3);
+    --blur: 15px;
+    --transition: all 0.3s ease;
+    --text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    --item-hover: rgba(255, 255, 255, 0.3);
+    --item-selected: rgba(67, 97, 238, 0.3);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url('/CompteDeMontePrize/static/images/background1.jpg');
+    padding: 20px;
+    color: white;
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Container principal avec effet glass */
+.container {
+    width: 100%;
+    max-width: 800px;
+    background: var(--glass);
+    backdrop-filter: blur(var(--blur));
+    -webkit-backdrop-filter: blur(var(--blur));
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 8px 32px 0 var(--shadow);
+}
+
+/* Titres */
+h1 {
+    font-size: 2.4rem;
+    margin-bottom: 2rem;
+    text-align: center;
+    color: white;
+    text-shadow: var(--text-shadow);
+    font-weight: 600;
+}
+
+h2 {
+    font-size: 2rem;
+    margin: 2rem 0;
+    color: white;
+    text-shadow: var(--text-shadow);
+    font-weight: 600;
+}
+
+/* Formulaires et inputs */
+.form-group {
+    margin-bottom: 2rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 1rem;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: white;
+    text-shadow: var(--text-shadow);
+}
+
+input, select {
+    width: 100%;
+    padding: 20px;
+    background: var(--glass-strong);
+    border: 1px solid var(--border);
+    border-radius: 15px;
+    font-size: 1.6rem;
+    color: white;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    margin-bottom: 1.5rem;
+    transition: var(--transition);
+}
+
+input:focus, select:focus {
+    outline: none;
+    border-color: white;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+}
+
+/* Bouton spécial */
+button {
+    width: 100%;
+    padding: 20px;
+    font-size: 1.8rem;
+    font-weight: 600;
+    color: white;
+    background: var(--glass-strong);
+    border: 1px solid var(--border);
+    border-radius: 15px;
+    cursor: pointer;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    transition: var(--transition);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+button:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Style commun pour les deux listes de sélection */
+.checkbox-list {
+    max-height: 300px;
+    overflow-y: auto;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 15px;
+    padding: 10px;
+}
+
+/* Style des items dans les deux listes */
+.checkbox-list .option-item,
+#prix-options .option-item {
+    padding: 15px 20px;
+    margin: 5px;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: white;
+    text-shadow: var(--text-shadow);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.checkbox-list .option-item:hover,
+#prix-options .option-item:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
+    transform: translateY(-2px);
+}
+
+.checkbox-list .option-item.selected,
+#prix-options .option-item.selected {
+    background: rgba(67, 97, 238, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 4px 15px rgba(67, 97, 238, 0.2);
+}
+
+/* Scrollbar personnalisée */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--glass);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--glass-strong);
+    border-radius: 5px;
+}
+
+/* Version Mobile */
+@media (max-width: 768px) {
+    body {
+        padding: 20px;
+        min-height: 100vh;
+        height: auto;
+    }
+
+    .container {
+        width: 95%;
+        padding: 30px 20px;
+        background: rgba(30, 41, 59, 0.8);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+    }
+
+    h1 {
+        font-size: 2.4rem;
+        margin-bottom: 30px;
+    }
+
+    h2 {
+        font-size: 2rem;
+        margin-bottom: 25px;
+    }
+
+    /* Style du sélecteur de fichier */
+    .file-input-wrapper {
+        height: 200px;
+        margin: 20px 0;
+    }
+
+    .file-input-content i {
+        font-size: 3.5rem;
+        margin-bottom: 15px;
+    }
+
+    .file-input-content p {
+        font-size: 1.8rem;
+        padding: 0 20px;
+        line-height: 1.4;
+    }
+
+    /* Style des menus déroulants */
+    .custom-select {
+        margin: 15px 0;
+    }
+
+    .select-selected {
+        background: rgba(30, 41, 59, 0.8);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        padding: 22px 20px;
+        font-size: 1.8rem;
+    }
+
+    .select-options {
+        background: rgba(30, 41, 59, 0.8);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        max-height: 60vh;
+    }
+
+    .select-option {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .select-option:hover {
+        background: rgba(255, 255, 255, 0.2);
+    }
+
+    .select-option.selected {
+        background: rgba(67, 97, 238, 0.3);
+    }
+
+    /* Style du switch */
+    .switch-wrapper {
+        margin: 25px 0;
+    }
+
+    .switch {
+        width: 65px;
+        height: 35px;
+    }
+
+    .slider:before {
+        width: 27px;
+        height: 27px;
+    }
+
+    .switch-wrapper span {
+        font-size: 1.8rem;
+    }
+
+    /* Style de l'input pourcentage */
+    .percentage-wrapper p {
+        font-size: 1.8rem;
+        margin-bottom: 15px;
+    }
+
+    .percentage-input input {
+        font-size: 1.8rem;
+        padding: 22px 60px 22px 20px;
+    }
+
+    .percentage-symbol {
+        font-size: 1.8rem;
+        right: 25px;
+    }
+
+    /* Style du bouton */
+    button {
+        padding: 20px 30px;
+        font-size: 1.8rem;
+        margin-top: 30px;
+        width: 100%; /* Pleine largeur sur mobile */
+    }
+
+    /* Style des messages */
+    .message {
+        font-size: 1.8rem;
+        padding: 20px;
+        margin: 20px 0;
+    }
+
+    /* Style de la scrollbar sur mobile */
+    .select-options::-webkit-scrollbar {
+        width: 10px; /* Plus large pour mobile */
+    }
+
+    .select-options::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.4);
+        border-radius: 5px;
+    }
+
+    /* Compteur de sélection */
+    .selected-count {
+        font-size: 1.8rem;
+        padding: 8px 15px;
+    }
+
+    /* Espacement entre les étapes */
+    #step1, #step2, #step3 {
+        margin-bottom: 35px;
+    }
+
+    /* Loading spinner */
+    .loading {
+        width: 50px;
+        height: 50px;
+        margin: 30px auto;
+    }
+}
+
+/* Loading spinner */
+.loading {
+    width: 50px;
+    height: 50px;
+    border: 4px solid var(--glass);
+    border-top: 4px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 20px auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Messages */
+.message {
+    padding: 20px;
+    border-radius: 15px;
+    margin: 1.5rem 0;
+    font-size: 1.6rem;
+    text-align: center;
+    background: var(--glass);
+    backdrop-filter: blur(var(--blur));
+    -webkit-backdrop-filter: blur(var(--blur));
+    border: 1px solid var(--border);
+}
+
+.success {
+    border-color: var(--success);
+    color: var(--success);
+}
+
+.error {
+    border-color: #ff4444;
+    color: #ff4444;
+}
+
+/* Fix pour iOS */
+input[type="file"] {
+    font-size: 1.6rem;
+    padding: 15px;
+}
+
+select {
+    width: 100%;
+    padding: 15px 20px;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    color: white;
+    font-size: 1.6rem;
+    cursor: pointer;
+    appearance: none;
+    -webkit-appearance: none;
+}
+
+/* Flèche personnalisée pour le select */
+select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 20px;
+    padding-right: 45px;
+}
+
+/* Hover effect */
+select:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Focus effect */
+select:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.4);
+    box-shadow: 0 4px 15px rgba(67, 97, 238, 0.2);
+}
+
+/* Style des options du select */
+select option {
+    background-color: #2b2d42;
+    color: white;
+    padding: 15px;
+}
+
+/* Ajustements mobile */
+@media (max-width: 768px) {
+    select {
+        padding: 20px;
+        font-size: 1.8rem;
+        padding-right: 50px;
+    }
+}
+
+/* Style du switch */
+.switch-wrapper {
+    display: flex;
+    align-items: center;
+    margin: 20px 0;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+    margin-right: 15px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--glass);
+    transition: .4s;
+    border-radius: 34px;
+    border: 1px solid var(--border);
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: var(--primary);
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+/* Styles pour l'étape 3 */
+.select-wrapper, .percentage-wrapper {
+    margin-bottom: 2rem;
+}
+
+.select-wrapper p, .percentage-wrapper p {
+    color: white;
+    text-shadow: var(--text-shadow);
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+
+.option-list {
+    background: var(--glass);
+    border: 1px solid var(--border);
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+#prix-options {
+    max-height: 250px;
+    background: transparent;
+    padding: 5px;
+}
+
+#prix-options .option-item {
+    padding: 15px 20px;
+    margin: 5px;
+    border-radius: 10px;
+    background: var(--glass);
+    color: white;
+    text-shadow: var(--text-shadow);
+}
+
+#prix-options .option-item:hover {
+    background: var(--glass-strong);
+}
+
+#prix-options .option-item.selected {
+    background: var(--primary);
+    border: 1px solid white;
+}
+
+/* Ajustements mobile */
+@media (max-width: 768px) {
+    .select-wrapper p, .percentage-wrapper p {
+        font-size: 2rem;
+    }
+
+    #prix-options .option-item {
+        padding: 20px;
+        font-size: 1.8rem;
+        margin: 8px;
+    }
+
+    .percentage-input input {
+        font-size: 2rem;
+        padding: 25px 60px 25px 25px;
+    }
+
+    .percentage-symbol {
+        font-size: 2rem;
+        right: 25px;
+    }
+}
+
+/* Style personnalisé pour l'input file */
+.file-input-wrapper {
+    position: relative;
+    width: 100%;
+    height: 150px;
+    border: 2px dashed var(--border);
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--glass);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.file-input-wrapper:hover {
+    background: var(--glass-strong);
+    border-color: white;
+}
+
+.file-input-wrapper input[type="file"] {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.file-input-content {
+    text-align: center;
+    color: white;
+    text-shadow: var(--text-shadow);
+}
+
+.file-input-content i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.file-input-content p {
+    font-size: 1.6rem;
+    margin: 0;
+}
+
+.file-name {
+    margin-top: 1rem;
+    font-size: 1.4rem;
+    color: white;
+    text-shadow: var(--text-shadow);
+}
+
+/* Style pour l'étape 3 */
+#prix-options {
+    max-height: 250px;
+    background: transparent;
+}
+
+#prix-options .option-item {
+    padding: 15px 20px;
+    margin: 5px;
+    border-radius: 10px;
+    background: var(--glass);
+    color: white;
+    text-shadow: var(--text-shadow);
+}
+
+#prix-options .option-item:hover {
+    background: var(--glass-strong);
+}
+
+#prix-options .option-item.selected {
+    background: var(--primary);
+    border: 1px solid white;
+}
+
+/* Ajustements mobile */
+@media (max-width: 768px) {
+    .file-input-wrapper {
+        height: 180px;
+    }
+
+    .file-input-content p {
+        font-size: 1.8rem;
+    }
+
+    #prix-options .option-item {
+        padding: 20px;
+        font-size: 1.8rem;
+        margin: 8px;
+    }
+}
+
+/* Différents fonds d'écran */
+.bg-gradient1 {
+    background-image: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+}
+
+.bg-gradient2 {
+    background-image: linear-gradient(45deg, #4361ee, #3f37c9);
+}
+
+.bg-image1 {
+    background-image: url('/static/images/background1.jpg');
+}
+
+.bg-image2 {
+    background-image: url('/static/images/background2.jpg');
+}
+
+.bg-pattern {
+    background-image: url('/static/images/pattern.png');
+    background-repeat: repeat;
+}
+
+/* Style du menu personnalisé */
+.custom-select {
+    position: relative;
+    width: 100%;
+}
+
+.select-selected {
+    padding: 20px;
+    background: rgba(30, 41, 59, 0.8);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.select-selected:hover {
+    background: rgba(30, 41, 59, 0.9);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-2px);
+}
+
+.select-selected i {
+    transition: transform 0.3s ease;
+}
+
+.select-selected.active i {
+    transform: rotate(180deg);
+}
+
+.select-options {
+    position: absolute;
+    top: calc(100% + 5px);
+    left: 0;
+    right: 0;
+    background: rgba(30, 41, 59, 0.95);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    max-height: 0;
+    overflow-y: auto;
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 100;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.select-options.active {
+    max-height: 250px;
+    opacity: 1;
+    padding: 10px;
+}
+
+/* Style de la scrollbar */
+.select-options::-webkit-scrollbar {
+    width: 8px;
+}
+
+.select-options::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+.select-options::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+}
+
+.select-options::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+.select-option {
+    padding: 15px 20px;
+    margin: 5px 0;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: white;
+    text-shadow: var(--text-shadow);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.select-option:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateX(5px);
+}
+
+.select-option.selected {
+    background: rgba(67, 97, 238, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+/* Version mobile */
+@media (max-width: 768px) {
+    .select-selected {
+        padding: 25px;
+        font-size: 1.8rem;
+    }
+
+    .select-option {
+        padding: 20px;
+        font-size: 1.8rem;
+    }
+
+    .select-options.active {
+        max-height: 300px;
+    }
+}
+
+/* Ajouter ces styles spécifiques pour la sélection multiple */
+#colonnesList.select-options .select-option {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#colonnesList.select-options .select-option::after {
+    content: '✓';
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+#colonnesList.select-options .select-option.selected::after {
+    opacity: 1;
+}
+
+/* Ajuster le style pour le conteneur des colonnes */
+#colonnesContainer {
+    margin-top: 20px;
+}
+
+#colonnesContainer p {
+    color: white;
+    text-shadow: var(--text-shadow);
+    margin-bottom: 10px;
+    font-size: 1.6rem;
+}
+
+/* Style pour la sélection multiple */
+#colonnesList.select-options .select-option {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    margin: 5px 0;
+}
+
+.checkmark {
+    color: white;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.select-option.selected .checkmark {
+    opacity: 1;
+}
+
+.selected-count {
+    color: white;
+    font-size: 1.6rem;
+}
+
+/* Style pour garder le menu ouvert */
+#step2 .select-options.active {
+    max-height: 300px;
+    opacity: 1;
+    pointer-events: auto;
+}
+
+/* Amélioration de la visibilité de la sélection */
+#colonnesList .select-option:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+#colonnesList .select-option.selected {
+    background: rgba(67, 97, 238, 0.3);
+}
+
+/* Style du compteur */
+.selected-count {
+    padding: 5px 10px;
+    border-radius: 15px;
+    background: rgba(255, 255, 255, 0.1);
+}

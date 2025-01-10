@@ -1,73 +1,107 @@
-# 🚀 Price Updater CLI: Mettez à jour vos prix avec style
+# 💰 Le Compte de Monte Prize v2.0
 
-Un outil en ligne de commande puissant et intuitif pour mettre à jour les prix dans vos fichiers Excel avec des règles d'arrondi personnalisées et un maximum de facilité.
+Une application web moderne et intuitive pour la mise à jour de vos prix avec des règles d'arrondi personnalisées. Cette nouvelle version apporte une interface utilisateur améliorée et une meilleure expérience utilisateur.
 
-## 🌟 Fonctionnalités
+## ✨ Nouvelles Fonctionnalités v2.0
 
-- 🚀 Lecture de fichiers Excel (.xlsx) pour une intégration sans effort
-- 💸 Calcul automatique des nouveaux prix avec pourcentage de marge pour une mise à jour rapide
-- 🔄 Règles d'arrondi intelligentes pour une précision maximale :
-  - 1,2,3,4 → arrondi à 0 pour une simplification
-  - 5 → reste inchangé pour une précision totale
-  - 6,7,8,9 → arrondi à la dizaine supérieure pour une logique de prix
-- 🚀 Génération d'un fichier CSV avec les nouveaux prix pour une exportation facile
-- 🔒 Préservation des codes-barres originaux pour une traçabilité parfaite
+- 🎨 Interface utilisateur complètement repensée
+- 📱 Design responsive (compatible mobile)
+- 🔄 Sélection multiple des colonnes avec interface visuelle
+- 🎯 Menus déroulants personnalisés et intuitifs
+- 💫 Animations et transitions fluides
+- 🔍 Prévisualisation des colonnes sélectionnées
+- ⚡ Traitement optimisé des fichiers
 
-## 📚 Installation
+## 🚀 Fonctionnalités Principales
 
-🔍 Cloner le repository pour commencer
-```bash
-git clone https://github.com/MrSamy91/CompteDeMontePrize.git
-cd price-updater
-```
-🔑 Créer un environnement virtuel pour une isolation parfaite
-```bash
+- 📤 Upload simple de fichiers Excel
+- 🔢 Règles d'arrondi intelligentes :
+  - 1,2,3,4 → arrondi à 0
+  - 5 → reste inchangé
+  - 6,7,8,9 → arrondi à la dizaine supérieure
+- 📊 Conservation des données importantes
+- 🚀 Export automatique en CSV
+- 🔒 Traitement sécurisé des données
+
+## 💻 Installation
+
+1. **Cloner le repository** :
+
+bash
+git clone https://github.com/monte-price/CompteDeMontePrize.git
+
+2. **Créer l'environnement virtuel** 
+
+bash
 python -m venv venv
-```
-💻 Activer l'environnement virtuel pour une utilisation sécurisée
-```bash
-source venv/bin/activate # Linux/Mac
-ou
-venv\Scripts\activate # Windows
-```
-📦 Installer les dépendances pour une mise à jour complète
-```bash
+
+3. **Activer l'environnement virtuel**
+
+bash
+source venv/bin/activate
+
+3. **Activer l'environnement** :
+- Windows : `venv\Scripts\activate`
+- Linux/Mac : `source venv/bin/activate`
+
+4. **Installer les dépendances** :
+bash
 pip install -r requirements.txt
-```
 
-## 📊 Utilisation
+## 🌐 Utilisation
 
-1️⃣ Activez votre environnement virtuel pour une sécurité maximale
-2️⃣ Lancez le script pour une mise à jour instantanée :
-```bash
-python hausse_prix.py
-```
-3️⃣ Suivez les instructions à l'écran pour une expérience utilisateur fluide :
-   - Entrez le chemin de votre fichier Excel pour une intégration sans effort
-   - Choisissez le pourcentage d'augmentation pour une mise à jour personnalisée
-   - Sélectionnez la colonne des prix pour une mise à jour ciblée
+1. **Lancer l'application** :
 
-## 🚀 Format du fichier Excel
 
-Votre fichier Excel doit contenir :
-- Une colonne pour les codes-barres/références pour une identification unique
-- Une colonne pour les prix pour une mise à jour facile
-- Des en-têtes de colonnes dans la première ligne pour une clarté maximale
+2. **Accéder à l'interface** : http://localhost:5000
 
-## 🚀 Contribution
+3. **Processus en 3 étapes** :
+   - Étape 1 : Upload du fichier Excel
+   - Étape 2 : Sélection des colonnes à conserver
+   - Étape 3 : Choix de la colonne prix et du pourcentage
 
-Les contributions sont les bienvenues ! N'hésitez pas à :
-1️⃣ Fork le projet pour une collaboration ouverte
-2️⃣ Créer une branche (`git checkout -b feature/AmazingFeature`) pour une gestion de version claire
-3️⃣ Commit vos changements (`git commit -m 'Add some AmazingFeature'`) pour une piste d'audit
-4️⃣ Push sur la branche (`git push origin feature/AmazingFeature`) pour une mise à jour instantanée
-5️⃣ Ouvrir une Pull Request pour une révision collaborative
+## 🛠️ Technologies
 
-## 📜 License
+- **Backend** :
+  - Flask
+  - Pandas
+  - Python 3.x
+- **Frontend** :
+  - HTML5
+  - CSS3 (Animations et Flexbox)
+  - JavaScript (Vanilla)
 
-Distribué sous la licence MIT pour une liberté maximale. Voir `LICENSE` pour plus d'informations sur les termes de la licence.
+## 🔒 Sécurité
 
-## 🤝 Inspiration
+- Validation des fichiers uploadés
+- Nettoyage automatique des fichiers temporaires
+- Traitement sécurisé des données
+- Protection contre les injections
 
-Ce projet a été inspiré par le besoin de mettre à jour les prix dans un fichier Excel avec des règles d'arrondi personnalisées.
-Je remercie donc un proche a moi qui avait besoin de mettre à jour les prix dans un fichier Excel avec des règles d'arrondi personnalisées. sa prennais de mon temps et ce n'était pas la premiere fois donc je me suis dit autant mettre mes compétence a sa disposition et faire un outil qui me simplifirais la vie au maximum quand il me redemanderais de le faire.
+## 📋 Format des Fichiers
+
+- Format accepté : `.xlsx`, `.xls`
+- Structure requise :
+  - Au moins une colonne de prix
+  - En-têtes de colonnes obligatoires
+  - Données numériques pour les prix
+
+## 🤝 Contribution
+
+1. Fork le projet
+2. Créez votre branche (`git checkout -b feature/AmazingFeature`)
+3. Commit (`git commit -m 'Add: nouvelle fonctionnalité'`)
+4. Push (`git push origin feature/AmazingFeature`)
+5. Ouvrez une Pull Request
+
+## 📝 License
+
+Distribué sous la licence MIT. Voir `LICENSE` pour plus d'informations.
+
+## 🌟 Démo
+
+Version de démonstration disponible sur : [comming soon (inshallah)]()
+
+## 📧 Contact
+
+Pour toute question ou suggestion, n'hésitez pas à ouvrir une issue.

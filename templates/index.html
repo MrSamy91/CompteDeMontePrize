@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Calculateur de Prix</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body class="bg-image1">
+    <div class="container">
+        <h1>Calculateur de Prix</h1>
+        <div id="step1">
+            <h2>Étape 1: Sélectionner le fichier</h2>
+            <div class="form-group">
+                <label for="fileInput">Sélectionnez votre fichier Excel:</label>
+                <div class="file-input-wrapper">
+                    <input type="file" id="fileInput" name="file" accept=".xlsx,.xls" required>
+                    <div class="file-input-content">
+                        <i class="fas fa-file-excel"></i>
+                        <p>Glissez votre fichier ici ou cliquez pour sélectionner</p>
+                    </div>
+                </div>
+                <div class="file-name"></div>
+            </div>
+        </div>
+
+        <div id="step2" style="display: none;">
+            <h2>Étape 2: Sélectionner les colonnes</h2>
+            <div class="form-group">
+                <div class="switch-wrapper">
+                    <label class="switch">
+                        <input type="checkbox" id="selectAll" checked>
+                        <span class="slider"></span>
+                    </label>
+                    <span>Garder toutes les colonnes</span>
+                </div>
+                <div id="colonnesContainer" style="display: none;">
+                    <p>Sélectionnez les colonnes à conserver:</p>
+                    <div class="custom-select">
+                        <div class="select-selected">
+                            <span>Sélectionner les colonnes</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="select-options" id="colonnesList">
+                            <!-- Les options seront ajoutées ici dynamiquement -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="step3" style="display: none;">
+            <h2>Étape 3: Configurer le calcul</h2>
+            <form id="processForm">
+                <div class="form-group">
+                    <p>Sélectionnez la colonne des prix:</p>
+                    <div class="custom-select">
+                        <div class="select-selected">
+                            <span>Sélectionner une colonne</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="select-options">
+                            <!-- Les options seront ajoutées ici dynamiquement -->
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="pourcentage">Pourcentage d'augmentation:</label>
+                    <input type="number" id="pourcentage" name="pourcentage" step="0.01" required>
+                </div>
+                <button type="submit">Calculer</button>
+            </form>
+        </div>
+        
+        <div id="loading" class="loading" style="display: none;"></div>
+        <div id="message" class="message" style="display: none;"></div>
+    </div>
+
+    <script>
+        let allColumns = [];
+        const fileInput = document.getElementById('fileInput');
+        const processForm = document.getElementById('processForm');
+        const selectAll = document.getElementById('selectAll');
+        const colonnesContainer = document.getElementById('colonnesContainer');
+        const loading = document.getElementById('loading');
+        const message = document.getElementById('message');
+
+        // Gestion des menus déroulants
+        document.addEventListener('DOMContentLoaded', function() {
+            const customSelects = document.querySelectorAll('.custom-select');
+            
+            customSelects.forEach(select => {
+                const selected = select.querySelector('.select-selected');
+                const optionsContainer = select.querySelector('.select-options');
+                
+                selected.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    selected.classList.toggle('active');
+                    optionsContainer.classList.toggle('active');
+                });
+
+                // Empêcher la fermeture lors du clic sur les options de l'étape 2
+                optionsContainer.addEventListener('click', function(e) {
+                    if (select.closest('#step2')) {
+                        e.stopPropagation();
+                    }
+                });
+            });
+
+            // Fermer les menus si on clique ailleurs
+            document.addEventListener('click', function(e) {
+                customSelects.forEach(select => {
+                    const selected = select.querySelector('.select-selected');
+                    const optionsContainer = select.querySelector('.select-options');
+                    
+                    // Si le clic n'est pas dans le menu
+                    if (!select.contains(e.target)) {
+                        selected.classList.remove('active');
+                        optionsContainer.classList.remove('active');
+                    }
+                });
+            });
+        });
+
+        fileInput.addEventListener('change', function(e) {
+            if (!e.target.files.length) return;
+
+            const formData = new FormData();
+            formData.append('file', e.target.files[0]);
+            
+            loading.style.display = 'block';
+
+            fetch('/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                loading.style.display = 'none';
+                
+                if (data.error) {
+                    showMessage(data.error, 'error');
+                    return;
+                }
+                
+                allColumns = data.columns;
+                
+                // Remplir la liste des colonnes (étape 2)
+                const colonnesList = document.getElementById('colonnesList');
+                colonnesList.innerHTML = '';
+                
+                const selectedCount = document.createElement('div');
+                selectedCount.className = 'selected-count';
+                selectedCount.textContent = `${allColumns.length} colonnes sélectionnées`;
+                document.querySelector('#step2 .select-selected').innerHTML = '';
+                document.querySelector('#step2 .select-selected').appendChild(selectedCount);
+
+                allColumns.forEach(column => {
+                    const option = document.createElement('div');
+                    option.className = 'select-option selected';
+                    option.dataset.value = column;
+                    option.innerHTML = `
+                        <span class="option-text">${column}</span>
+                        <span class="checkmark">✓</span>
+                    `;
+                    
+                    option.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        this.classList.toggle('selected');
+                        const selectedOptions = colonnesList.querySelectorAll('.select-option.selected');
+                        selectedCount.textContent = `${selectedOptions.length} colonnes sélectionnées`;
+                    });
+                    
+                    colonnesList.appendChild(option);
+                });
+
+                // Remplir le menu de l'étape 3
+                const prixSelect = document.querySelector('#step3 .select-options');
+                prixSelect.innerHTML = '';
+                const prixSelectedText = document.querySelector('#step3 .select-selected span');
+                prixSelectedText.textContent = 'Sélectionner une colonne';
+
+                allColumns.forEach(column => {
+                    const option = document.createElement('div');
+                    option.className = 'select-option';
+                    option.dataset.value = column;
+                    option.textContent = column;
+                    
+                    option.addEventListener('click', function() {
+                        prixSelectedText.textContent = this.textContent;
+                        document.querySelectorAll('#step3 .select-option').forEach(opt => {
+                            opt.classList.remove('selected');
+                        });
+                        this.classList.add('selected');
+                        document.querySelector('#step3 .select-selected').classList.remove('active');
+                        document.querySelector('#step3 .select-options').classList.remove('active');
+                    });
+                    
+                    prixSelect.appendChild(option);
+                });
+
+                document.getElementById('step2').style.display = 'block';
+                document.getElementById('step3').style.display = 'block';
+            })
+            .catch(error => {
+                loading.style.display = 'none';
+                showMessage('Erreur lors du chargement du fichier', 'error');
+                console.error(error);
+            });
+        });
+
+        // Fonction pour remplir les options du custom select
+        function remplirOptionsColonnePrix(colonnes) {
+            const optionsContainer = document.querySelector('.select-options');
+            optionsContainer.innerHTML = '';
+            
+            colonnes.forEach(colonne => {
+                const option = document.createElement('div');
+                option.className = 'select-option';
+                option.textContent = colonne;
+                option.dataset.value = colonne;
+                
+                option.addEventListener('click', function() {
+                    const selectedText = document.querySelector('.select-selected span');
+                    selectedText.textContent = this.textContent;
+                    selectedValue = this.dataset.value;
+                    
+                    document.querySelectorAll('.select-option').forEach(opt => {
+                        opt.classList.remove('selected');
+                    });
+                    this.classList.add('selected');
+                    
+                    document.querySelector('.select-selected').classList.remove('active');
+                    document.querySelector('.select-options').classList.remove('active');
+                });
+                
+                optionsContainer.appendChild(option);
+            });
+        }
+
+        selectAll.addEventListener('change', function() {
+            colonnesContainer.style.display = this.checked ? 'none' : 'block';
+            const options = document.querySelectorAll('#colonnesList .select-option');
+            const selectedCount = document.querySelector('.selected-count');
+            
+            options.forEach(option => {
+                if (this.checked) {
+                    option.classList.add('selected');
+                } else {
+                    option.classList.remove('selected');
+                }
+            });
+            
+            if (this.checked) {
+                selectedCount.textContent = `${options.length} colonnes sélectionnées`;
+            } else {
+                selectedCount.textContent = '0 colonnes sélectionnées';
+            }
+        });
+
+            // Ajouter dans la partie script
+    document.getElementById('fileInput').addEventListener('change', function(e) {
+        const fileName = e.target.files[0]?.name;
+        const fileNameDiv = document.querySelector('.file-name');
+        if (fileName) {
+            fileNameDiv.textContent = `Fichier sélectionné : ${fileName}`;
+            fileNameDiv.style.display = 'block';
+        } else {
+            fileNameDiv.style.display = 'none';
+        }
+    });
+
+        processForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData();
+            
+            // Récupérer la colonne de prix sélectionnée (étape 3)
+            const selectedPrixOption = document.querySelector('#step3 .select-option.selected');
+            if (!selectedPrixOption) {
+                showMessage('Veuillez sélectionner une colonne de prix', 'error');
+                return;
+            }
+            formData.append('colonne_prix', selectedPrixOption.dataset.value);
+            
+            // Récupérer le pourcentage
+            const pourcentage = document.getElementById('pourcentage').value;
+            if (!pourcentage) {
+                showMessage('Veuillez entrer un pourcentage', 'error');
+                return;
+            }
+            formData.append('pourcentage', pourcentage);
+            
+            // Récupérer les colonnes sélectionnées (étape 2)
+            const colonnesSelectionnees = [];
+            if (selectAll.checked) {
+                colonnesSelectionnees.push(...allColumns);
+            } else {
+                document.querySelectorAll('#colonnesList .select-option.selected').forEach(item => {
+                    colonnesSelectionnees.push(item.dataset.value);
+                });
+            }
+            
+            if (colonnesSelectionnees.length === 0) {
+                showMessage('Veuillez sélectionner au moins une colonne', 'error');
+                return;
+            }
+            
+            colonnesSelectionnees.forEach(colonne => {
+                formData.append('colonnes_a_garder[]', colonne);
+            });
+
+            loading.style.display = 'block';
+
+            fetch('/process', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.blob())
+            .then(blob => {
+                loading.style.display = 'none';
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'prix_modifies.csv';
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+                showMessage('Fichier généré avec succès!', 'success');
+            })
+            .catch(error => {
+                loading.style.display = 'none';
+                showMessage('Erreur lors du traitement', 'error');
+                console.error(error);
+            });
+        });
+
+        function showMessage(text, type) {
+            message.textContent = text;
+            message.className = `message ${type}`;
+            message.style.display = 'block';
+            setTimeout(() => {
+                message.style.display = 'none';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
